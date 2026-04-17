@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard — Inventory System{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+
+{% block content %}
+<div class="am-dashboard">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="am-sidebar d-none d-lg-block" id="dashboard-sidebar">
+    <div class="am-sidebar-title">
+      <i class="bi bi-speedometer2"></i> Dashboard
+    </div>
+    <a href="{% url 'dashboard_home' %}" class="am-sidebar-link {% block sidebar_home %}{% endblock %}" id="sidebar-home">
+      <i class="bi bi-house-door"></i> Overview
+    </a>
+    <a href="{% url 'product_list' %}" class="am-sidebar-link {% block sidebar_products %}{% endblock %}" id="sidebar-products">
+      <i class="bi bi-box-seam"></i> Products
+    </a>
+    <a href="{% url 'supplier_list' %}" class="am-sidebar-link {% block sidebar_suppliers %}{% endblock %}" id="sidebar-suppliers">
+      <i class="bi bi-truck"></i> Suppliers
+    </a>
+    <a href="{% url 'inventory_entry' %}" class="am-sidebar-link {% block sidebar_inventory_entry %}{% endblock %}" id="sidebar-receive">
+      <i class="bi bi-arrow-down-circle"></i> Receive Inventory
+    </a>
+    <a href="{% url 'inventory_list' %}" class="am-sidebar-link {% block sidebar_inventory %}{% endblock %}" id="sidebar-inventory">
+      <i class="bi bi-archive"></i> Reception Log
+    </a>
+    <a href="{% url 'export_products' %}" class="am-sidebar-link text-success" id="sidebar-export">
+      <i class="bi bi-file-earmark-excel"></i> Export Products
+    </a>
+    <a href="/" class="am-sidebar-link" id="sidebar-store">
+      <i class="bi bi-shop"></i> View Store
+    </a>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="am-dashboard-main">
+    {% block dashboard_content %}{% endblock %}
+  </main>
+
+</div>
+{% endblock %}

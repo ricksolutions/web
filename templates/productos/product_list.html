@@ -1,0 +1,90 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Products — Inventory System{% endblock %}
+{% block nav_products %}active{% endblock %}
+{% block sidebar_products %}active{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="am-page-header">
+  <h1><i class="bi bi-box-seam text-amazon-accent"></i> Products</h1>
+  <div class="actions">
+    <a href="{% url 'export_products' %}" class="btn-am-success" id="export-products-btn">
+      <i class="bi bi-file-earmark-excel"></i> Export
+    </a>
+    <a href="{% url 'product_create' %}" class="btn-am-action" id="add-product-btn">
+      <i class="bi bi-plus-lg"></i> New Product
+    </a>
+  </div>
+</div>
+
+<div class="am-table-wrapper">
+  <table class="am-table" id="products-table">
+    <thead>
+      <tr>
+        <th style="width:60px;">Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr id="product-row-{{ product.pk }}">
+        <td>
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="am-table-thumb">
+          {% else %}
+            <div class="am-table-thumb-placeholder">
+              <i class="bi bi-image"></i>
+            </div>
+          {% endif %}
+        </td>
+        <td>
+          <strong>{{ product.name }}</strong>
+          {% if product.description %}
+            <div style="font-size:12px; color:#777; margin-top:2px;">
+              {{ product.description|truncatechars:50 }}
+            </div>
+          {% endif %}
+        </td>
+        <td>
+          <strong style="color: var(--amazon-text);">${{ product.price }}</strong>
+        </td>
+        <td>
+          {% if product.stock > 10 %}
+            <span class="am-badge am-badge-success">{{ product.stock }} in stock</span>
+          {% elif product.stock > 0 %}
+            <span class="am-badge am-badge-warning">{{ product.stock }} low stock</span>
+          {% else %}
+            <span class="am-badge am-badge-danger">Out of stock</span>
+          {% endif %}
+        </td>
+        <td>
+          <div class="d-flex gap-2">
+            <a href="{% url 'product_update' product.pk %}" class="btn-am-secondary btn-am-sm" id="edit-product-{{ product.pk }}">
+              <i class="bi bi-pencil"></i> Edit
+            </a>
+            <a href="{% url 'product_delete' product.pk %}" class="btn-am-danger btn-am-sm" id="delete-product-{{ product.pk }}">
+              <i class="bi bi-trash"></i> Delete
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center py-5" style="color:#999;" id="no-products-row">
+          <i class="bi bi-inbox" style="font-size:2.5rem;"></i>
+          <p class="mt-2 mb-3">No products found.</p>
+          <a href="{% url 'product_create' %}" class="btn-am-action btn-am-sm">
+            <i class="bi bi-plus-circle"></i> Add First Product
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

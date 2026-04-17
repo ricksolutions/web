@@ -1,0 +1,31 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Delete Supplier — Inventory System{% endblock %}
+{% block sidebar_suppliers %}active{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+  <div class="am-confirm-card" id="delete-supplier-card">
+    <div class="am-confirm-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+    <h2>Delete Supplier?</h2>
+    <p>
+      You are about to permanently delete<br>
+      <strong>"{{ object.name }}"</strong>.<br>
+      This action cannot be undone.
+    </p>
+    <form method="post" id="delete-supplier-form">
+      {% csrf_token %}
+      <div class="d-flex justify-content-center gap-3">
+        <button type="submit" class="btn-am-danger" id="confirm-delete-btn">
+          <i class="bi bi-trash"></i> Yes, Delete
+        </button>
+        <a href="{% url 'supplier_list' %}" class="btn-am-secondary" id="cancel-delete-btn">
+          <i class="bi bi-x-circle"></i> Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

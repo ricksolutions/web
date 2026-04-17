@@ -1,0 +1,62 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}{% if object %}Edit{% else %}New{% endif %} Supplier — Inventory System{% endblock %}
+{% block sidebar_suppliers %}active{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="am-page-header">
+  <h1>
+    <i class="bi bi-{% if object %}pencil{% else %}plus-circle{% endif %} text-amazon-accent"></i>
+    {% if object %}Edit{% else %}New{% endif %} Supplier
+  </h1>
+  <div class="actions">
+    <a href="{% url 'supplier_list' %}" class="btn-am-secondary" id="cancel-btn">
+      <i class="bi bi-arrow-left"></i> Back to Suppliers
+    </a>
+  </div>
+</div>
+
+<div class="am-form-card" id="supplier-form-card">
+  <div class="am-form-card-header">
+    <i class="bi bi-truck"></i>
+    {% if object %}Editing: {{ object.name }}{% else %}Create a New Supplier{% endif %}
+  </div>
+  <div class="am-form-card-body">
+    <form method="post" id="supplier-form">
+      {% csrf_token %}
+      <div class="row g-4">
+        {% for field in form %}
+        <div class="col-md-6">
+          <label for="{{ field.id_for_label }}" class="am-form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <div class="am-form-help">{{ field.help_text }}</div>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="am-form-error"><i class="bi bi-exclamation-circle"></i> {{ error }}</div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="d-flex gap-3 mt-4 pt-3 border-top">
+        <button type="submit" class="btn-am-action" id="save-supplier-btn">
+          <i class="bi bi-check-circle"></i> Save Supplier
+        </button>
+        <a href="{% url 'supplier_list' %}" class="btn-am-secondary" id="form-cancel-btn">
+          <i class="bi bi-x-circle"></i> Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.querySelectorAll('#supplier-form input:not([type=hidden]):not([type=submit]):not([type=checkbox]), #supplier-form select, #supplier-form textarea').forEach(function(el) {
+    el.classList.add('am-form-control');
+  });
+</script>
+{% endblock %}

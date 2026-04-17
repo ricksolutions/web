@@ -1,0 +1,58 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Receive Inventory — Inventory System{% endblock %}
+{% block sidebar_inventory_entry %}active{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="am-page-header">
+  <h1><i class="bi bi-arrow-down-circle text-amazon-accent"></i> Receive Inventory</h1>
+  <div class="actions">
+    <a href="{% url 'inventory_list' %}" class="btn-am-secondary" id="cancel-btn">
+      <i class="bi bi-arrow-left"></i> Back to Log
+    </a>
+  </div>
+</div>
+
+<div class="am-form-card" id="inventory-form-card">
+  <div class="am-form-card-header">
+    <i class="bi bi-archive"></i> Register New Inventory Reception
+  </div>
+  <div class="am-form-card-body">
+    <form method="post" id="inventory-form">
+      {% csrf_token %}
+      <div class="row g-4">
+        {% for field in form %}
+        <div class="col-md-6">
+          <label for="{{ field.id_for_label }}" class="am-form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <div class="am-form-help">{{ field.help_text }}</div>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="am-form-error"><i class="bi bi-exclamation-circle"></i> {{ error }}</div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+      <div class="d-flex gap-3 mt-4 pt-3 border-top">
+        <button type="submit" class="btn-am-action" id="save-reception-btn">
+          <i class="bi bi-check-circle"></i> Register Reception
+        </button>
+        <a href="{% url 'inventory_list' %}" class="btn-am-secondary" id="form-cancel-btn">
+          <i class="bi bi-x-circle"></i> Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.querySelectorAll('#inventory-form input:not([type=hidden]):not([type=submit]):not([type=checkbox]), #inventory-form select, #inventory-form textarea').forEach(function(el) {
+    el.classList.add('am-form-control');
+  });
+</script>
+{% endblock %}

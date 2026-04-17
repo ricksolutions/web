@@ -1,0 +1,67 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Inventory Log — Inventory System{% endblock %}
+{% block nav_inventory %}active{% endblock %}
+{% block sidebar_inventory %}active{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="am-page-header">
+  <h1><i class="bi bi-archive text-amazon-accent"></i> Inventory Receptions</h1>
+  <div class="actions">
+    <a href="{% url 'inventory_entry' %}" class="btn-am-action" id="new-reception-btn">
+      <i class="bi bi-plus-lg"></i> New Reception
+    </a>
+  </div>
+</div>
+
+<div class="am-table-wrapper">
+  <table class="am-table" id="inventory-table">
+    <thead>
+      <tr>
+        <th>Date &amp; Time</th>
+        <th>Product</th>
+        <th>Supplier</th>
+        <th>Quantity Received</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+      <tr id="inventory-row-{{ forloop.counter }}">
+        <td>
+          <i class="bi bi-calendar3" style="color:#888; margin-right:4px;"></i>
+          <span style="font-size:13px; color:#555;">{{ entry.date|date:"Y-m-d H:i" }}</span>
+        </td>
+        <td>
+          <strong>{{ entry.product.name }}</strong>
+        </td>
+        <td>
+          {% if entry.supplier %}
+            <i class="bi bi-truck" style="color:#888; margin-right:4px;"></i>
+            {{ entry.supplier.name }}
+          {% else %}
+            <span style="color:#bbb;">—</span>
+          {% endif %}
+        </td>
+        <td>
+          <span class="am-badge am-badge-success">
+            <i class="bi bi-plus-circle"></i> {{ entry.quantity }} units
+          </span>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center py-5" style="color:#999;" id="no-entries-row">
+          <i class="bi bi-archive" style="font-size:2.5rem;"></i>
+          <p class="mt-2 mb-3">No inventory receptions yet.</p>
+          <a href="{% url 'inventory_entry' %}" class="btn-am-action btn-am-sm">
+            <i class="bi bi-plus-circle"></i> Receive Inventory
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

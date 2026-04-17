@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} — Inventory System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <!-- Breadcrumb -->
+  <nav class="am-detail-breadcrumb" aria-label="breadcrumb" id="product-breadcrumb">
+    <a href="/">Inventory</a> &rsaquo;
+    <a href="/">Products</a> &rsaquo;
+    <span>{{ product.name|truncatechars:40 }}</span>
+  </nav>
+
+  <div class="row g-4">
+
+    <!-- LEFT: Product Image -->
+    <div class="col-md-5">
+      <div class="am-detail-img-area" id="product-image-area">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+          <i class="bi bi-image text-muted" style="font-size: 7rem;"></i>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- MIDDLE: Product Info -->
+    <div class="col-md-4">
+      <h1 class="am-detail-title" id="product-detail-title">{{ product.name }}</h1>
+      <div class="am-detail-brand">Visit the Inventory Store</div>
+
+      <!-- Rating row -->
+      <div class="am-detail-rating">
+        <span class="am-stars" style="font-size:15px;">
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-half"></i>
+        </span>
+        <a href="#" style="color: var(--amazon-link); font-size:14px; font-weight:600; text-decoration:none;">4,321 ratings</a>
+        <span style="color:#ccc;">|</span>
+        <a href="#" style="color: var(--amazon-link); font-size:14px; font-weight:600; text-decoration:none;">Search this page</a>
+      </div>
+
+      <!-- Price -->
+      <div class="mb-3">
+        <div class="am-detail-price" id="product-detail-price">
+          <span style="font-size:14px; font-weight:700; margin-top:4px;">$</span>
+          <span>{{ product.price|floatformat:0 }}</span>
+          <span style="font-size:14px; font-weight:700; margin-top:4px;">.99</span>
+        </div>
+        <div style="font-size:14px; margin-top:6px;">
+          <span style="color:#005B99; font-weight:800; font-style:italic;">&#10003; prime</span>
+          <span style="color:#1A1A1A; font-weight:500; margin-left:6px;">One-Day Delivery</span>
+        </div>
+        <div style="font-size:13px; color:#1A1A1A; margin-top:4px; font-weight:600;">FREE Returns</div>
+      </div>
+
+      <hr>
+
+      <!-- Description -->
+      <h2 class="fw-bold" style="font-size:16px; color:var(--amazon-text);">About this item</h2>
+      <div style="color:#1A1A1A; font-size:14px; line-height:1.7;" id="product-detail-desc">
+        <p>{{ product.description|linebreaksbr|default:"No description available." }}</p>
+      </div>
+
+      <div style="font-size:13px; color:#007185; cursor:pointer; margin-top:8px;">
+        <i class="bi bi-chat-left-dots"></i> Report an issue with this product
+      </div>
+    </div>
+
+    <!-- RIGHT: Action Panel -->
+    <div class="col-md-3">
+      <div class="am-action-panel" id="product-action-panel">
+        <!-- Price in panel -->
+        <div class="am-detail-price mb-3">
+          <span style="font-size:14px; font-weight:700; margin-top:4px;">$</span>
+          <span>{{ product.price|floatformat:0 }}</span>
+          <span style="font-size:14px; font-weight:700; margin-top:4px;">.99</span>
+        </div>
+
+        <!-- Prime + Delivery -->
+        <div style="font-size:13px; line-height:1.7; color:var(--amazon-text); margin-bottom:12px;">
+          <span style="color:#005B99; font-weight:800; font-style:italic;">&#10003; prime</span><br>
+          FREE delivery <strong style="color: var(--amazon-green);">Tomorrow</strong>.
+          Order within <span style="color: var(--amazon-green); font-weight:700;">3 hrs 12 mins</span>
+        </div>
+
+        <div style="font-size:13px; margin-bottom:14px;">
+          <i class="bi bi-geo-alt"></i>
+          <a href="#" style="color: var(--amazon-link); font-weight:600; text-decoration:none;">Deliver to Internal System</a>
+        </div>
+
+        <!-- Stock status -->
+        {% if product.stock > 10 %}
+          <div style="color: var(--amazon-green); font-size:17px; font-weight:700; margin-bottom:12px;">&#10003; In Stock</div>
+        {% elif product.stock > 0 %}
+          <div style="color: var(--amazon-red); font-size:15px; font-weight:700; margin-bottom:12px;">Only {{ product.stock }} left in stock — order soon.</div>
+        {% else %}
+          <div style="color: var(--amazon-red); font-size:15px; font-weight:700; margin-bottom:12px;">Currently unavailable.</div>
+        {% endif %}
+
+        <!-- Qty selector -->
+        <div class="mb-3">
+          <select class="am-form-control" style="width:90px; border-radius:8px;" {% if product.stock == 0 %}disabled{% endif %} id="qty-select">
+            <option>Qty: 1</option>
+            <option>Qty: 2</option>
+            <option>Qty: 3</option>
+          </select>
+        </div>
+
+        <!-- Action buttons (mock — no cart logic) -->
+        <button class="btn-am-primary w-100 mb-2 justify-content-center" id="add-to-cart-btn"
+          onclick="alert('This is a display-only store. Cart functionality is disabled.');">
+          Add to Cart
+        </button>
+        <button class="btn-am-action w-100 justify-content-center" id="buy-now-btn"
+          onclick="alert('This is a display-only store. Purchase functionality is disabled.');">
+          Buy Now
+        </button>
+
+        <!-- Shipping info -->
+        <div style="font-size:12.5px; color:var(--amazon-text); margin-top:16px; border-top: 1px solid var(--amazon-border); padding-top:12px;">
+          <div class="d-flex justify-content-between mb-1">
+            <span style="font-weight:600;">Ships from</span> <span>Amazon</span>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span style="font-weight:600;">Sold by</span> <span>Inventory System</span>
+          </div>
+          <div class="d-flex justify-content-between mb-1">
+            <span style="font-weight:600;">Returns</span>
+            <span style="color: var(--amazon-link); font-weight:600;">Eligible</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span style="font-weight:600;">Payment</span>
+            <span style="color: var(--amazon-link); font-weight:600;">Secure</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
